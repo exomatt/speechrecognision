@@ -1,4 +1,6 @@
 from tkinter import ttk, filedialog
+from scipy.io import wavfile as wav
+from scipy.fftpack import fft
 
 import speech_recognition as sr
 import matplotlib.pyplot as plt
@@ -33,6 +35,9 @@ class VoiceRecognitionPage(tk.Frame):
                             command=lambda: self.load_wav())
         button_load_wav.grid(row=1, column=4, padx=10, pady=10)
 
+        button_create_fft = ttk.Button(self, text="Create fft",
+                            command=lambda: self.create_fft())
+        button_create_fft.grid(row=1, column=5, padx=10, pady=10)
 
         self.name = tk.StringVar()
         e1 = tk.Entry(self, textvariable=self.name).grid(row=2, column=3, padx=10, pady=10)
@@ -81,19 +86,44 @@ class VoiceRecognitionPage(tk.Frame):
 
         Time = np.linspace(0, len(signal) / fs, num=len(signal))
 
-        figure = Figure(figsize=(10, 4), dpi=100)
+        figure = Figure(figsize=(6, 4), dpi=100)
         figure.canvas.set_window_title('Signal Wave...')
 
         first_subplot = figure.add_subplot(111)
 
-        first_subplot.plot(Time, signal)
+        first_subplot.plot(Time, signal/1000)
         first_subplot.set_title('Signal Wave')
-        first_subplot.set_title('Signal Wave')
-        first_subplot.set_ylabel('Frequency [Hz]')
+        first_subplot.set_ylabel('Frequency [kHz]')
         first_subplot.set_xlabel('Time [s]')
+
+        figure.tight_layout()
 
         canvas = FigureCanvasTkAgg(figure, master=self)
         canvas.draw()
-        canvas.get_tk_widget().grid(row=4, column=0, columnspan=8, padx=10, pady=30)
+        canvas.get_tk_widget().grid(row=4, column=0, columnspan=5, padx=10, pady=30)
+
+    def create_fft(self):
+
+        figure = Figure(figsize=(6, 4), dpi=100)
+        figure.canvas.set_window_title('FFT')
+
+        first_subplot = figure.add_subplot(111)
+
+        rate, data = wav.read(self.path_wav)
+        fft_out = fft(data)
+
+        first_subplot.plot(data/1000, np.abs(fft_out))
+        first_subplot.set_title('FFT')
+        first_subplot.set_ylabel('Amplitude')
+        first_subplot.set_xlabel('Frequency [kHz]')
+
+        figure.tight_layout()
+
+        canvas = FigureCanvasTkAgg(figure, master=self)
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=4, column=5, columnspan=5, padx=10, pady=30)
+
+
+
 
 
