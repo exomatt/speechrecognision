@@ -1,5 +1,5 @@
-
 from VoiceRecognitionPage import VoiceRecognitionPage
+
 
 class AllPages(object):
     def __init__(self, container, controller):

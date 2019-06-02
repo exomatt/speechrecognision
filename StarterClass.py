@@ -1,9 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
 
 from AllPages import AllPages
 
 LARGE_FONT = ("Verdana", 12)
+
 
 class StarterClass(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -27,12 +27,12 @@ class StarterClass(tk.Tk):
         self.frames = AllPages(container, self).AllFrames
         self.show_frame("VoiceRecognitionPage")
 
-
     def show_frame(self, page_name):
-            frame = self.frames[page_name]
-            frame.tkraise()
+        frame = self.frames[page_name]
+        frame.tkraise()
+
 
 app = StarterClass()
-app.geometry("1280x720") #690x462
+app.geometry("1280x720")  # 690x462
 app.mask = []
 app.mainloop()
