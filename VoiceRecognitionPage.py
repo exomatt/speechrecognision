@@ -6,6 +6,7 @@ from tkinter import ttk, filedialog
 
 import numpy as np
 import speech_recognition as sr
+from langdetect import detect
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from scipy.fftpack import fft
@@ -43,6 +44,8 @@ class VoiceRecognitionPage(tk.Frame):
         self.label_eng.grid(row=3, column=6, padx=10, pady=10)
         self.label_de = tk.Label(self, text="", font=LARGE_FONT)
         self.label_de.grid(row=4, column=6, padx=10, pady=10)
+        self.label_lang = tk.Label(self, text="", font=LARGE_FONT)
+        self.label_lang.grid(row=5, column=6, padx=10, pady=10)
         self.name = tk.StringVar()
         e1 = tk.Entry(self, textvariable=self.name).grid(row=2, column=3, padx=10, pady=10)
 
@@ -145,6 +148,9 @@ class VoiceRecognitionPage(tk.Frame):
                 text["alternative"][0]["confidence"])
             print(values)
             self.label_eng.config(text=values)
+            language = detect(text["alternative"][0]["transcript"])
+            if language == 'en':
+                self.label_lang.config(text="Language of text is english")
         except LookupError:  # speech is unintelligible
             self.label_eng.config(text='Could not understand audio')
 
@@ -153,7 +159,9 @@ class VoiceRecognitionPage(tk.Frame):
             values = "You said in Deutsch: " + text["alternative"][0]["transcript"] + "; with confidence: " + str(
                 text["alternative"][0]["confidence"])
             print(values)
+            language = detect(text["alternative"][0]["transcript"])
             self.label_de.config(text=values)
-
+            if language == 'de':
+                self.label_lang.config(text="Language of text is deutsch")
         except LookupError:  # speech is unintelligible
             self.label_de.config(text='Could not understand audio')

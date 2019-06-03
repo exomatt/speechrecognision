@@ -10,6 +10,7 @@ speechrecognition = "*"
 pyaudio = "*"
 matplotlib = "*"
 scipy = "*"
+langdetect = "*"
 
 [requires]
 python_version = "3.7"
