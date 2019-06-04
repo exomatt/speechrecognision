@@ -92,7 +92,7 @@ class VoiceRecognitionPage(tk.Frame):
 
         Time = np.linspace(0, len(signal) / fs, num=len(signal))
 
-        figure = Figure(figsize=(6, 4), dpi=100)
+        figure = Figure(figsize=(5, 3), dpi=100)
         figure.canvas.set_window_title('Signal Wave...')
 
         first_subplot = figure.add_subplot(111)
@@ -110,7 +110,7 @@ class VoiceRecognitionPage(tk.Frame):
 
     def create_fft(self):
 
-        figure = Figure(figsize=(6, 4), dpi=100)
+        figure = Figure(figsize=(5, 3), dpi=100)
         figure.canvas.set_window_title('FFT')
 
         first_subplot = figure.add_subplot(111)
@@ -127,7 +127,7 @@ class VoiceRecognitionPage(tk.Frame):
 
         canvas = FigureCanvasTkAgg(figure, master=self)
         canvas.draw()
-        canvas.get_tk_widget().grid(row=4, column=5, columnspan=5, padx=10, pady=30)
+        canvas.get_tk_widget().grid(row=5, column=0, columnspan=5, padx=10, pady=30)
 
     def check_language(self):
         ROOT_DIR = os.path.dirname(sys.modules['__main__'].__file__)
