@@ -9,8 +9,9 @@ import speech_recognition as sr
 from langdetect import detect
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from scipy.fftpack import fft
+from scipy.fftpack import fft, fftfreq
 from scipy.io import wavfile as wav
+import matplotlib.pyplot as plt
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -112,16 +113,32 @@ class VoiceRecognitionPage(tk.Frame):
 
         figure = Figure(figsize=(5, 3), dpi=100)
         figure.canvas.set_window_title('FFT')
-
         first_subplot = figure.add_subplot(111)
 
-        rate, data = wav.read(self.path_wav)
-        fft_out = fft(data)
+        samplerate, data = wav.read(self.path_wav)
+        samples = data.shape[0]
 
-        first_subplot.plot(data / 1000, np.abs(fft_out))
+        datafft = fft(data)
+
+        fftabs = abs(datafft)
+        freqs = fftfreq(samples, 1/samplerate)
+
         first_subplot.set_title('FFT')
+        first_subplot.set_xscale("log")
         first_subplot.set_ylabel('Amplitude')
-        first_subplot.set_xlabel('Frequency [kHz]')
+        first_subplot.set_xlabel('Frequency [Hz]')
+        first_subplot.set_xlim([10, samplerate / 2])
+        first_subplot.grid(True)
+        first_subplot.plot(freqs[:int(freqs.size / 2)], fftabs[:int(freqs.size / 2)])
+        #first_subplot.show()
+
+        # first_subplot.grid(True)
+        # #first_subplot.plot(freqs, np.abs(fft_out))
+        # first_subplot.plot(freqs[:int(freqs.size/2)], np.abs(fft_out)[:int(freqs.size/2)])
+        # first_subplot.xlim([10 , rate/2])
+        # first_subplot.plot(freqs, np.abs(fft_out))
+        # first_subplot.set_xlabel('Frequency [Hz]')
+
 
         figure.tight_layout()
 
